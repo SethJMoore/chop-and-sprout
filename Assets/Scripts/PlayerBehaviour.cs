@@ -53,11 +53,39 @@ public class PlayerBehaviour : MonoBehaviour
 
     void OnChop()
     {
-
+        Collider2D closestCollider = null;
+        float closestDistance = Mathf.Infinity;
+        foreach (Collider2D col in otherCollidersBeingTouched)
+        {
+            float distance = Vector2.Distance(transform.position, col.transform.position);
+            if (distance < closestDistance && col.GetComponentInParent<BranchBehaviour>())
+            {
+                closestDistance = distance;
+                closestCollider = col;
+            }
+        }
+        if (closestCollider != null)
+        {
+            closestCollider.GetComponentInParent<BranchBehaviour>().chopAt(closestCollider.gameObject);
+        }
     }
 
     void OnSprout()
     {
-
+        Collider2D closestCollider = null;
+        float closestDistance = Mathf.Infinity;
+        foreach (Collider2D col in otherCollidersBeingTouched)
+        {
+            float distance = Vector2.Distance(transform.position, col.transform.position);
+            if (distance < closestDistance && col.GetComponentInParent<BranchBehaviour>())
+            {
+                closestDistance = distance;
+                closestCollider = col;
+            }
+        }
+        if (closestCollider != null)
+        {
+            closestCollider.GetComponentInParent<BranchBehaviour>().sproutNewBranches();
+        }
     }
 }
