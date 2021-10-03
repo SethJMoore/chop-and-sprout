@@ -34,7 +34,30 @@ public class BranchBehaviour : MonoBehaviour
         }
     }
 
-    void addSegment()
+    public void chopAt(GameObject segment)
+    {
+        int index = listOfSegments.IndexOf(segment);
+        if (index == 0)
+        {
+            // TODO: Destroy this whole branch, probably?
+        }
+        else
+        {
+            int removeCount = listOfSegments.Count - index;
+            List<GameObject> brokenSegments = listOfSegments.GetRange(index, removeCount);
+            listOfSegments.RemoveRange(index, removeCount);
+            brokenSegments.ForEach(delegate(GameObject segment)
+            {
+                GameObject.Destroy(segment);
+                // TODO: If child branches are child game objects of the last
+                //       segment, I shouldn't have to worry about manually
+                //       taking care of them.
+            });
+            lastSegment = listOfSegments[index -1];
+        }
+    }
+
+    private void addSegment()
     {
         //lastSegment = Instantiate(segment, lastSegmentTransform);
         if (lastSegment)
