@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segment: {fileID: 928546222999506178, guid: ba87424beaa47e54b998e07cf972c7d1, type: 3}
+  branch: {fileID: 0}
   timeBetweenNewSegments: 0.1
 --- !u!50 &7689619146873133600
 Rigidbody2D:

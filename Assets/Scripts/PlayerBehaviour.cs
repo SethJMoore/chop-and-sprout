@@ -22,7 +22,7 @@ public class PlayerBehaviour : MonoBehaviour
         // No jumping or climbing allowed. Only climbing.
         if (otherCollidersBeingTouched.Count > 0)
         {
-            rb.AddForce(moveVal * movementForce);
+            rb.AddForce(moveVal * movementForce * Time.deltaTime);
         }
     }
 

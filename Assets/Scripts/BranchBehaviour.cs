@@ -7,7 +7,7 @@ public class BranchBehaviour : MonoBehaviour
     [SerializeField]
     private GameObject segment; // Segment prefab
     [SerializeField]
-    private GameObject branch; // Branch prefab
+    public GameObject branch; // Branch prefab
     [SerializeField]
     private float timeBetweenNewSegments = 1f;
     private GameObject lastSegment;
@@ -68,6 +68,7 @@ public class BranchBehaviour : MonoBehaviour
             GameObject.Destroy(segment);
         });
         lastSegment = listOfSegments[index -1];
+        lastSegmentTransform = lastSegment.transform;
     }
 
     public void sproutNewBranches()
@@ -75,10 +76,15 @@ public class BranchBehaviour : MonoBehaviour
         if (childBranches == null)
         {
             isGrowing = false;
-            // TODO: Instantiate two branches with same position as lastSegment and
-            //       attach lastSegment to them with FixedJoint. They need to have
-            //       their rotations set at randomly downward angles.
-            //       childBranches = {branch1, branch2}
+            GameObject branch1 = Instantiate(branch, lastSegmentTransform.position, randomRotationDown());
+            branch1.SetActive(true);
+            branch1.GetComponent<BranchBehaviour>().branch = branch;
+            gameObject.AddComponent<FixedJoint2D>().connectedBody = branch1.GetComponent<Rigidbody2D>();
+            GameObject branch2 = Instantiate(branch, lastSegmentTransform.position, randomRotationDown());
+            branch2.SetActive(true);
+            branch2.GetComponent<BranchBehaviour>().branch = branch;
+            gameObject.AddComponent<FixedJoint2D>().connectedBody = branch2.GetComponent<Rigidbody2D>();
+            childBranches = new GameObject[] {branch1, branch2};
         }
         else
         {
@@ -107,19 +113,19 @@ public class BranchBehaviour : MonoBehaviour
         if (lastSegment)
         {
             lastSegment = Instantiate(segment, transform);
-            lastSegment.transform.localPosition = lastSegmentTransform.localPosition + Vector3.down * 0.05f;
+            lastSegment.transform.localPosition = lastSegmentTransform.localPosition + Vector3.down * 0.125f;
         }
         else
         {
             lastSegment = Instantiate(segment, transform);
-            lastSegment.transform.position = lastSegmentTransform.localPosition + Vector3.down * 0.05f;
+            lastSegment.transform.position = lastSegmentTransform.localPosition + Vector3.down * 0.125f;
         }
         lastSegmentTransform = lastSegment.transform;
         listOfSegments.Add(lastSegment);
     }
 
-    Quaternion randomRotation()
+    Quaternion randomRotationDown()
     {
-        return Quaternion.Euler(0.0f, 0.0f, Random.Range(0, 360));
+        return Quaternion.Euler(0.0f, 0.0f, Random.Range(-90, 90));
     }
 }
